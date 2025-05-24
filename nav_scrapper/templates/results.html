@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extraction Results - Navbar Links</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .query-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .website-info {
+            padding: 30px 40px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .website-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .website-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .website-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .website-details h3 {
+            color: #1f2937;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .website-url {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .website-url:hover {
+            color: #764ba2;
+            transform: translateX(4px);
+        }
+
+        .results-section {
+            padding: 40px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .results-count {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .nav-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .nav-table thead {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        }
+
+        .nav-table th {
+            padding: 20px 24px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .nav-table td {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .nav-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .nav-table tbody tr:hover {
+            background: #f8fafc;
+            transform: scale(1.01);
+        }
+
+        .nav-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .link-text {
+            font-weight: 500;
+            color: #1f2937;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-url {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .link-url:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .external-icon {
+            width: 14px;
+            height: 14px;
+            opacity: 0.6;
+            flex-shrink: 0;
+        }
+
+        .row-number {
+            width: 60px;
+            text-align: center;
+            font-weight: 600;
+            color: #6b7280;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .actions {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .try-another-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .try-another-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .try-another-btn:hover::before {
+            left: 100%;
+        }
+
+        .try-another-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .scroll-buttons {
+            position: fixed;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .scroll-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            opacity: 0;
+            transform: translateX(100px);
+            pointer-events: none;
+        }
+
+        .scroll-btn.show {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .scroll-btn:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .scroll-btn:active {
+            transform: translateY(-1px) scale(1.05);
+        }
+
+        .scroll-top {
+            bottom: 100px;
+        }
+
+        .scroll-bottom {
+            bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 16px;
+            }
+
+            .scroll-buttons {
+                right: 20px;
+            }
+
+            .scroll-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 16px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .website-info,
+            .results-section {
+                padding: 20px;
+            }
+
+            .website-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .nav-table {
+                min-width: 600px;
+            }
+
+            .nav-table th,
+            .nav-table td {
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Scroll Buttons -->
+        <div class="scroll-buttons">
+            <button class="scroll-btn scroll-top" id="scrollTopBtn" title="Scroll to Top">
+                ↑
+            </button>
+            <button class="scroll-btn scroll-bottom" id="scrollBottomBtn" title="Scroll to Bottom">
+                ↓
+            </button>
+        </div>
+        <!-- Header Section -->
+        <div class="header">
+            <h2>🎯 Extraction Results</h2>
+            <p class="query-text">Results for: <strong>{{ website.query }}</strong></p>
+        </div>
+
+        <!-- Website Information -->
+        <div class="website-info">
+            <div class="website-card">
+                <div class="website-icon">
+                    🌐
+                </div>
+                <div class="website-details">
+                    <h3>Target Website</h3>
+                    <a href="{{ website.url }}" class="website-url" target="_blank">
+                        {{ website.url }}
+                        <svg class="external-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+                            <path d="M5 5a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2v-1a1 1 0 10-2 0v1H5V7h1a1 1 0 000-2H5z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section">
+            <div class="results-header">
+                <h3 class="results-title">
+                    📋 Navigation Links
+                </h3>
+                <div class="results-count">
+                    {{ website.nav_links.all|length }} Links Found
+                </div>
+            </div>
+
+            {% if website.nav_links.all %}
+                <div class="table-container">
+                    <table class="nav-table">
+                        <thead>
+                            <tr>
+                                <th class="row-number">#</th>
+                                <th>Link Text</th>
+                                <th>URL</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for link in website.nav_links.all %}
+                            <tr>
+                                <td class="row-number">{{ forloop.counter }}</td>
+                                <td>
+                                    <div class="link-text" title="{{ link.text }}">
+                                        {{ link.text|default:"No Text" }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="{{ link.href }}" class="link-url" target="_blank" title="{{ link.href }}">
+                                        {{ link.href }}
+                                        <svg class="external-icon" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"></path>
+                                            <path d="M5 5a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2v-1a1 1 0 10-2 0v1H5V7h1a1 1 0 000-2H5z"></path>
+                                        </svg>
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if link.href|slice:":4" == "http" %}
+                                        <span style="color: #10b981; font-weight: 500;">🔗 External</span>
+                                    {% else %}
+                                        <span style="color: #f59e0b; font-weight: 500;">📄 Internal</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="icon">🔍</div>
+                    <h3>No Navigation Links Found</h3>
+                    <p>We couldn't find any navigation links on this website.</p>
+                </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="actions">
+                <a href="{% url 'home' %}" class="try-another-btn">
+                    🔄 Try Another Search
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add copy functionality to URLs
+        document.querySelectorAll('.link-url').forEach(link => {
+            link.addEventListener('dblclick', function(e) {
+                e.preventDefault();
+                navigator.clipboard.writeText(this.href).then(() => {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '✓ Copied!';
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                    }, 1000);
+                });
+            });
+        });
+
+        // Add row highlighting
+        document.querySelectorAll('.nav-table tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.background = '#f0f9ff';
+                this.style.borderLeft = '4px solid #667eea';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.background = '';
+                this.style.borderLeft = '';
+            });
+        });
+    </script>
+</body>
+</html>
